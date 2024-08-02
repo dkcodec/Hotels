@@ -14,6 +14,7 @@ const config = {
       center: true,
       padding: '2rem',
       screens: {
+        md: '754px',
         '2xl': '1400px',
       },
     },
@@ -60,6 +61,25 @@ const config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
+        'fade-in-right': {
+          '0%': {
+            opacity: '0',
+            transform: 'translate3d(100%, -100%, 0)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translate3d(0, 0, 0)',
+          },
+        },
+        'fade-out-right': {
+          '0%': {
+            opacity: '1',
+          },
+          '100%': {
+            opacity: '0',
+            transform: 'translate3d(100%, 0, 0)',
+          },
+        },
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' },
@@ -70,6 +90,8 @@ const config = {
         },
       },
       animation: {
+        'fade-out-right': 'fade-out-right 1s ease-in-out 2s 1',
+        'fade-in-right': 'fade-in-right 1s ease-in-out 2s 1',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },

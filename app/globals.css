@@ -68,3 +68,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Это для скроллбара справа сайта */
+
+::-webkit-scrollbar {
+  width: 16px;
+  background-color: var(--primary);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: hsl(var(--accent));
+  border: 5px solid hsl(var(--background));
+}
+
+::-webkit-scrollbar-track {
+  background-color: hsl(var(--background));
+}
