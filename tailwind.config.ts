@@ -97,7 +97,18 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    function ({ addUtilities }: { addUtilities: any }) {
+      const newUtilities = {
+        '.backdrop-blur-3px': {
+          'backdrop-filter': 'blur(1px)',
+          '-webkit-backdrop-filter': 'blur(10px)',
+        },
+      }
+      addUtilities(newUtilities, ['responsive', 'hover'])
+    },
+  ],
 } satisfies Config
 
 export default config
