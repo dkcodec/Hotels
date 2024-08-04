@@ -16,14 +16,12 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang='en'>
-        <head></head>
-        <body>
-          <NavBar />
-          {children}
-          <Footer />
-        </body>
-      </html>
+      <head></head>
+      <body>
+        <NavBar />
+        {children}
+        <Footer />
+      </body>
     </ClerkProvider>
   )
 }

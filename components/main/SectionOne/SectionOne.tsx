@@ -31,9 +31,9 @@ const SectionOne: React.FC = () => {
           transition={{ ease: 'linear', duration: 0.2, delay: 0.2 }}
         >
           <p className='font-light text-gray-400'>
-            We have <span className='text-accent'>459</span> rooms spread
-            throughout Indonesia with room standards equivalent to 5 star
-            hotels.
+            We have <span className='text-accent'>72128</span> hotels spread
+            throughout world and we are still growing. We have the best offers
+            for you.
           </p>
         </motion.div>
       </div>

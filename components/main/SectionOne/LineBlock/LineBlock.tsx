@@ -1,11 +1,8 @@
-import React from 'react'
-
+import React, { useState, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
 
 import SearchWhite from '@/public/icons/search-white.svg'
-import SearchBlack from '@/public/icons/search-gray.svg'
 import CheckIn from '@/public/icons/Check-in.svg'
 import CheckOut from '@/public/icons/Check-out.svg'
 import Location from '@/public/icons/Location.svg'
@@ -13,28 +10,72 @@ import User from '@/public/icons/User.svg'
 
 import LineBlockItem from './LineBlockItem'
 
+interface SearchState {
+  location: string
+  guests: string
+  checkIn: string
+  checkOut: string
+}
+
 const LineBlock: React.FC = () => {
-  const [searchState, setSearchState] = useState({
-    isVisible: false,
-    isFilled: false,
-    inputValue: '',
+  const [searchState, setSearchState] = useState<SearchState>({
+    location: '',
+    guests: '',
+    checkIn: '',
+    checkOut: '',
   })
 
-  const toggleSearchVisibility = () => {
-    setSearchState((prevState) => ({
-      ...prevState,
-      isVisible: !prevState.isVisible,
-    }))
-  }
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target
+      setSearchState((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }))
+    },
+    []
+  )
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSearchState((prevState) => ({
-      ...prevState,
-      inputValue: value,
-      isFilled: value !== '',
-    }))
-  }
+  const handleSubmit = useCallback(async () => {
+    try {
+      console.log('Search data:', searchState)
+    } catch (error) {
+      console.error('Error submitting search data', error)
+    }
+  }, [searchState])
+
+  const searchItems = useMemo(
+    () => [
+      {
+        title: 'Location',
+        img: Location,
+        name: 'location',
+        placeholder: 'Enter location',
+      },
+      {
+        title: 'Guests',
+        img: User,
+        name: 'guests',
+        placeholder: 'Enter guests',
+      },
+      {
+        title: 'Check-in',
+        img: CheckIn,
+        name: 'checkIn',
+        placeholder: 'Enter check-in date',
+        type: 'date',
+      },
+      {
+        title: 'Check-out',
+        img: CheckOut,
+        name: 'checkOut',
+        placeholder: 'Enter check-out date',
+        type: 'date',
+      },
+    ],
+    []
+  )
+
   return (
     <div className='flex justify-end overflow-hidden'>
       <motion.div
@@ -42,66 +83,31 @@ const LineBlock: React.FC = () => {
         initial={{ translateX: '100%' }}
         transition={{ ease: 'linear', duration: 0.5, delay: 0.2 }}
       >
-        <div className='bg-[#555555] flex items-center justify-end rounded-l-[55px] w-fit pl-20'>
-          <div className='grid md:grid-cols-4 grid-cols-2 gap-8 mr-20'>
-            <LineBlockItem
-              title='Location'
-              img={Location}
-              text='Jammu & Kashmir'
-              subText='Jammu district'
-            />
-            <LineBlockItem
-              title='Guests'
-              img={User}
-              text='3 Person'
-              subText='2 Adult, 1 Child'
-            />
-            <LineBlockItem
-              title='Check-in'
-              img={CheckIn}
-              text='24 July 2024'
-              subText='Select date'
-            />
-            <LineBlockItem
-              title='Check-out'
-              img={CheckOut}
-              text='28 July 2024'
-              subText='Select date'
-            />
+        <div className='bg-[#555555] md:flex items-center justify-end p-5 md:rounded-l-[55px] w-fit md:pl-20'>
+          <div className='grid md:grid-cols-4 grid-cols-2 gap-8 md:mr-20'>
+            {searchItems.map((item) => (
+              <LineBlockItem
+                key={item.name}
+                title={item.title}
+                img={item.img}
+                value={searchState[item.name as keyof SearchState]}
+                placeholder={item.placeholder}
+                name={item.name}
+                onChange={handleInputChange}
+                type={item.type}
+              />
+            ))}
           </div>
           <div>
-            {searchState.isVisible ? (
-              <motion.form
-                className={`flex bg-white rounded-3xl pl-2 pr-2 m-5 ${
-                  searchState.isFilled
-                    ? 'border-accent border-2 transition-all'
-                    : ''
-                }`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3 }}
-              >
-                <input
-                  type='text'
-                  value={searchState.inputValue}
-                  onChange={handleInputChange}
-                  placeholder="Let's find place..."
-                  className='text-background rounded-full pl-2 pr-2 outline-none'
-                />
-                <button type='submit'>
-                  <Image src={SearchBlack} alt='search' />
-                </button>
-              </motion.form>
-            ) : (
-              <button
-                onClick={toggleSearchVisibility}
-                className='flex flex-col items-center justify-center bg-accent mr-20 rounded-2xl p-5 m-5'
-              >
-                <Image src={SearchWhite} alt='search' width={25} height={25} />
-                <p className='text-sm font-light'>search</p>
-              </button>
-            )}
+            <button
+              onClick={handleSubmit}
+              className='flex md:flex-col items-center justify-center bg-accent md:mr-20 rounded-2xl mt-5 md:mt-0 md:p-5 p-4 md:m-5'
+            >
+              <Image src={SearchWhite} alt='search' width={25} height={25} />
+              <p className='md:text-sm font-light ml-5 md:ml-0 mt-0 md:mt-1'>
+                search
+              </p>
+            </button>
           </div>
         </div>
       </motion.div>
